@@ -34,6 +34,8 @@
     font-size: 24px;
     margin-top: 10px;
     transition: color 0.2s linear;
+    pointer-events: auto;
+    cursor: pointer;
   }
 </style>
 </head>
@@ -164,15 +166,15 @@
     hue = (hue + 5) % 360;
   }, 100);
 
+  // 🔊 Play audio only when ">.<" is clicked
   const audio = document.getElementById('bg-audio');
-  function enableAudio() {
-    audio.play().catch(err => console.warn('Autoplay blocked:', err));
-    window.removeEventListener('click', enableAudio);
-  }
-  window.addEventListener('click', enableAudio);
+  face.addEventListener('click', () => {
+    audio.play().catch(err => console.warn('Audio play failed:', err));
+  });
 })();
 </script>
 
+<!-- 🔈 No autoplay -->
 <audio id="bg-audio" src="wisp.mp3" loop></audio>
 
 </body>
