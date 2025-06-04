@@ -35,7 +35,7 @@
     margin-top: 10px;
     transition: color 0.2s linear;
     pointer-events: auto;
-    cursor: pointer;
+    cursor: default;
   }
 </style>
 </head>
@@ -165,15 +165,10 @@
     face.style.color = `hsl(${hue}, 100%, 70%)`;
     hue = (hue + 5) % 360;
   }, 100);
-
-<audio id="bg-audio" src="wisp.mp3" autoplay loop></audio>
-
-  });
 })();
 </script>
 
-<!-- 🔈 No autoplay -->
-<audio id="bg-audio" src="wisp.mp3" loop></audio>
+<audio id="bg-audio" src="wisp.mp3" autoplay loop></audio>
 
 </body>
 </html>
