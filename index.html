@@ -163,10 +163,17 @@
     face.style.color = `hsl(${hue}, 100%, 70%)`;
     hue = (hue + 5) % 360;
   }, 100);
+
+  const audio = document.getElementById('bg-audio');
+  function enableAudio() {
+    audio.play().catch(err => console.warn('Autoplay blocked:', err));
+    window.removeEventListener('click', enableAudio);
+  }
+  window.addEventListener('click', enableAudio);
 })();
 </script>
 
-<audio id="bg-audio" src="wisp.mp3" autoplay loop></audio>
+<audio id="bg-audio" src="wisp.mp3" loop></audio>
 
 </body>
 </html>
