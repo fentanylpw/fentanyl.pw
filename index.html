@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Snowfall with ASCII Art</title>
+<style>
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: black;
+    overflow: hidden;
+    font-family: monospace;
+    color: white;
+  }
+  #snowCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+  }
+  #ascii-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: pre;
+    z-index: 1;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+  }
+  #face {
+    color: hotpink;
+    font-size: 24px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="snowCanvas"></canvas>
+
+<div id="ascii-container">
+<pre id="ascii-art">
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⢚⠝⠉⣧⠀
+⠀⠀⠀⠀⠀⠀⡞⠛⢝⠲⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⢠⠂⠀⠀⢸⠀
+⠀⠀⠀⠀⠀⠀⡇⠀⠀⠑⢄⠉⠳⢤⡤⠴⠖⡖⠒⠒⠚⠥⢴⡁⠀⠀⠀⠀⡇
+⠀⠀⠀⠀⠀⠀⢧⠀⠀⠀⢀⡽⠊⠁⠀⠀⠀⢧⠀⠀⠀⠀⠀⠀⠑⢄⠀⢰⠀
+⠀⠀⠀⠀⠀⠀⠸⡄⠀⡠⠃⠀⠀⠀⠀⠀⢠⠀⢃⠀⢀⠤⠐⠂⠤⡀⠑⡎⠀
+⠀⠀⠀⠀⠀⠀⠀⠹⣴⠁⡠⠂⠉⣨⡵⣦⡆⠀⠀⢳⡟⢻⣷⣦⠀⠰⠀⢹⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⡇⠀⣾⣿⣧⣼⠑⠀⠀⡇⢿⠛⠛⡹⠀⡰⠀⢸⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣧⠀⠱⣀⠙⠠⠤⢊⠔⠠⠤⠈⠂⠬⠥⠐⠚⠀⠤⣼⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠘⣄⠤⠒⠉⠉⠉⢄⠀⡠⠒⠤⠀⠜⠁⠀⠠⠉⣩⠏⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⢎⡁⠄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡶⣏⠉⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠋⡩⠚⡤⢀⣀⣀⣀⣀⣀⡠⠤⠐⠊⠁⡇⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣠⠊⠀⠀⠀⡰⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡇⠀⠀⠀
+⠀⠀⠀⠀⠀⢀⡞⠁⠀⠀⠀⡰⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀
+⠀⠀⠀⠀⢀⡎⠀⠀⠀⡠⠊⠀⠘⠀⠀⠀⠀⠈⢹⠉⠁⠀⠀⠀⢸⠀⠀⠀⠀
+⠀⢀⡴⠚⠉⠇⠐⠒⠁⠀⠀⠀⠀⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡞⠀⠀⠀⠀
+⣰⠋⠀⢀⠤⡆⠀⠀⠀⢀⡀⠀⢀⣰⢀⡀⠀⠀⡀⣀⡀⠀⢀⣰⠃⠀⠀⠀⠀
+⣿⠀⠀⠐⠤⠴⠤⠤⠤⠯⣰⠀⡄⠘⡃⠠⠀⡄⠸⠁⢠⠀⠀⠙⡆⠀⠀⠀⠀
+⠈⢦⡀⠀⠀⠀⠀⠀⠀⠀⣸⠛⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀
+⠀⠀⠉⠁⠒⠒⠒⠒⠒⠚⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+</pre>
+  <div id="face">&gt;.&lt;</div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('snowCanvas');
+  const ctx = canvas.getContext('2d');
+
+  let width, height;
+  const snowflakes = [];
+  const maxFlakes = 200;
+
+  // Get bounding rect of ASCII container relative to viewport
+  const asciiContainer = document.getElementById('ascii-container');
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Snowflake class
+  class Snowflake {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      // Start above screen
+      this.x = Math.random() * width;
+      this.y = Math.random() * -height; // random start above screen
+      this.size = 10 + Math.random() * 8;
+      this.speedY = 0.5 + Math.random() * 1.5;
+      this.speedX = (Math.random() - 0.5) * 0.5;
+      this.isAvoiding = false;
+    }
+    update(asciiRect) {
+      // Check if inside ASCII area + small buffer
+      const buffer = 20;
+      const insideAsciiX = this.x > asciiRect.left - buffer && this.x < asciiRect.right + buffer;
+      const insideAsciiY = this.y > asciiRect.top - buffer && this.y < asciiRect.bottom + buffer;
+
+      if (insideAsciiX && insideAsciiY) {
+        // Avoid the ASCII area by moving sideways and slightly up
+        this.isAvoiding = true;
+        if (this.x < asciiRect.left) {
+          this.x -= 1.5;
+        } else if (this.x > asciiRect.right) {
+          this.x += 1.5;
+        } else {
+          // Inside horizontal bounds, pick direction based on proximity
+          if (this.x - asciiRect.left < asciiRect.right - this.x) {
+            this.x -= 1.5;
+          } else {
+            this.x += 1.5;
+          }
+        }
+        this.y -= this.speedY; // move up while avoiding
+      } else {
+        this.isAvoiding = false;
+        this.y += this.speedY;
+        this.x += this.speedX;
+      }
+
+      // Wrap around horizontally
+      if (this.x < 0) this.x = width;
+      if (this.x > width) this.x = 0;
+
+      // Respawn if out of screen vertically
+      if (this.y > height) {
+        this.reset();
+        this.y = 0;
+      }
+      if (this.y < 0) {
+        // If avoiding pushed above screen, let it come back down slowly
+        this.y = 0;
+        this.speedY = 0.5 + Math.random() * 1.5;
+      }
+    }
+    draw(ctx) {
+      ctx.fillStyle = 'white';
+      ctx.font = `${this.size}px monospace`;
+      ctx.fillText('*', this.x, this.y);
+    }
+  }
+
+  // Create initial snowflakes
+  for (let i = 0; i < maxFlakes; i++) {
+    snowflakes.push(new Snowflake());
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    const asciiRect = asciiContainer.getBoundingClientRect();
+
+    for (const flake of snowflakes) {
+      flake.update(asciiRect);
+      flake.draw(ctx);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
+</script>
+
+</body>
+</html>
