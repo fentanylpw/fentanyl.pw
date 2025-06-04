@@ -31,9 +31,9 @@
     user-select: none;
   }
   #face {
-    color: hotpink;
     font-size: 24px;
     margin-top: 10px;
+    transition: color 0.2s linear;
   }
 </style>
 </head>
@@ -75,7 +75,6 @@
   let width, height;
   const snowflakes = [];
   const maxFlakes = 200;
-
   const asciiContainer = document.getElementById('ascii-container');
 
   function resize() {
@@ -126,7 +125,6 @@
 
       if (this.x < 0) this.x = width;
       if (this.x > width) this.x = 0;
-
       if (this.y > height) {
         this.reset();
         this.y = 0;
@@ -150,16 +148,22 @@
   function animate() {
     ctx.clearRect(0, 0, width, height);
     const asciiRect = asciiContainer.getBoundingClientRect();
-
     for (const flake of snowflakes) {
       flake.update(asciiRect);
       flake.draw(ctx);
     }
-
     requestAnimationFrame(animate);
   }
 
   animate();
+
+  // 🌈 Rainbow effect for the face
+  const face = document.getElementById('face');
+  let hue = 0;
+  setInterval(() => {
+    face.style.color = `hsl(${hue}, 100%, 70%)`;
+    hue = (hue + 5) % 360;
+  }, 100);
 })();
 </script>
 
