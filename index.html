@@ -166,10 +166,8 @@
     hue = (hue + 5) % 360;
   }, 100);
 
-  // 🔊 Play audio only when ">.<" is clicked
-  const audio = document.getElementById('bg-audio');
-  face.addEventListener('click', () => {
-    audio.play().catch(err => console.warn('Audio play failed:', err));
+<audio id="bg-audio" src="wisp.mp3" autoplay loop></audio>
+
   });
 })();
 </script>
